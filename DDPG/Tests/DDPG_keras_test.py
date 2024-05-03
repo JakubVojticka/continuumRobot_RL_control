@@ -39,7 +39,7 @@ print('Press 3 for minus_weighted_euclidean\n')
 print('Press 4 for distance_based\n')
 reward_selection = int(input("Please Enter Your Reward Selection: "))
 
-episode_number = 5
+episode_number = 1
 for _ in range(episode_number):
     env = continuumEnv() # initialize environment
 

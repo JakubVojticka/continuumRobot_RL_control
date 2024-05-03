@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../Pytorch')
+sys.path.append('../')
 sys.path.append('../RL')
 sys.path.append('../Keras')
 
@@ -8,14 +8,15 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 import math
 import matplotlib.pyplot as plt
 import time
-import pickle
 from environment import continuumEnv
 from TD3 import OUActionNoise, policy
-from TD3_agent import Agent
 plt.style.use('../continuum_robot/plot.mplstyle')
 from continuum_robot.utils import *
 
+# %matplotlib notebook
+
 # %% Evaluate the policy
+
 storage = {store_name: {} for store_name in ['error', 'pos', 'kappa','reward']}
 storage['error']['error_store'] = []
 storage['error']['x'] = []
@@ -51,7 +52,7 @@ for _ in range(episode_number):
 
     env.render_init() # uncomment for animation
 
-    N = 1000
+    N = 200
     step = 0
     for step in range(N): # or while True:
         start = time.time()
@@ -75,7 +76,7 @@ for _ in range(episode_number):
         print("{}th action".format(step))
         print("Goal Position",state[2:4])
         if reward_selection == 1:
-            print("Error: {0}, Current State: {1}".format(math.sqrt(abs(reward)), state)) # for step_minus_euclidean_square
+            print("Error: {0}, Current State: {1}".format(math.sqrt(-1*reward), state)) # for step_minus_euclidean_square
         else:
             print("Error: {0}, Current State: {1}".format(env.error, state)) # for other rewards
         print("Action: {0},  Kappas {1}".format(action, [env.kappa1,env.kappa2,env.kappa3]))
@@ -84,7 +85,7 @@ for _ in range(episode_number):
         stop = time.time()
         env.time += (stop - start)
         if reward_selection == 1:
-            storage['error']['error_store'].append(math.sqrt(abs(reward))) # for step_minus_euclidean_square
+            storage['error']['error_store'].append(math.sqrt(-1*reward)) # for step_minus_euclidean_square
         else:
             storage['error']['error_store'].append((env.error)) # for other rewards
         storage['kappa']['kappa1'].append(env.kappa1)
@@ -115,9 +116,7 @@ plt.xlabel("Position x [m]",fontsize=15)
 plt.ylabel("Position y [m]",fontsize=15)
 plt.show()
 env.close()
-# %%
 
-# %%
 # As Subplots
 sub_plot_various_results(error_store = storage['error']['error_store'],
                          error_x = storage['error']['x'],

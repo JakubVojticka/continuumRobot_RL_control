@@ -268,13 +268,13 @@ actor_lr = 1e-3         # learning rate of the actor
 critic_optimizer = tf.keras.optimizers.Adam(critic_lr)
 actor_optimizer = tf.keras.optimizers.Adam(actor_lr)
 
-total_episodes = 250
+total_episodes = 100
 # Discount factor for future rewards
 gamma = 0.99            # discount factor
 # Used to update target networks
 tau = 5e-3              # for soft update of target parameters
 
-buffer = Buffer(int(5e5), 128) # Buffer(50000, 64)
+buffer = Buffer(int(5e5), 64) # Buffer(50000, 64)
 
 # %% Train or Evaluate
 # To store reward history of each episode
@@ -284,7 +284,7 @@ avg_reward_list = []
 counter = 0
 avg_reward = 0
 
-TRAIN = True
+TRAIN = False
 if TRAIN:
     std_dev = 0.2
     ou_noise = OUActionNoise(mean=np.zeros(num_actions), std_deviation=float(std_dev) * np.ones(num_actions))
@@ -311,7 +311,7 @@ if TRAIN:
         episodic_reward = 0
     
         # while True:
-        for i in range(1000):
+        for i in range(200):
             # Uncomment this to see the Actor in action
             # But not in a python notebook.
             # env.render()

@@ -1,0 +1,48 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+def plot_robot(initial_state, goal_state, delta):
+    # Initial state
+    initial_color = 'orange'
+    # Goal state
+    goal_color = 'red'
+    # Section colors
+    section_colors = ['blue', 'red', 'red']
+    
+    fig, ax = plt.subplots()
+    
+    # Plot initial state
+    for i in range(3):
+        ax.plot([initial_state[i][0], initial_state[i][0] + np.cos(initial_state[i][1])],
+                [initial_state[i][1], initial_state[i][1] + np.sin(initial_state[i][1])],
+                color=initial_color)
+    
+    # Plot goal state
+    for i in range(3):
+        ax.plot([goal_state[i][0], goal_state[i][0] + np.cos(goal_state[i][1])],
+                [goal_state[i][1], goal_state[i][1] + np.sin(goal_state[i][1])],
+                color=goal_color)
+    
+    # Plot robot sections
+    for i in range(3):
+        ax.plot([initial_state[i][0], goal_state[i][0]],
+                [initial_state[i][1], goal_state[i][1]],
+                color=section_colors[i])
+    
+    # Plot goal tolerance
+    for i in range(3):
+        ax.add_patch(plt.Circle((goal_state[i][0], goal_state[i][1]), delta, color='lightcoral', alpha=0.5))
+    
+    ax.set_aspect('equal', adjustable='box')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_title('Three-section continuum robot')
+    plt.grid(True)
+    plt.show()
+
+# Example usage
+initial_state = [(0, 0), (1, np.pi/3), (2, np.pi/4)]  # Format: (position, angle)
+goal_state = [(2, np.pi/6), (2.5, np.pi/2), (3, np.pi/3)]  # Format: (position, angle)
+delta = 0.1  # Tolerance
+
+plot_robot(initial_state, goal_state, delta)
